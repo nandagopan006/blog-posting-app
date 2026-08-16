@@ -1,11 +1,11 @@
 import BlogCard from "../components/BlogCard";
-import blogData from "../utils/blogData";
 
-function BlogList() {
+
+function BlogList({blogs}) {
   return (
     <div>
       <h2>Blogs</h2>
-      {blogData.map((blog) => (
+      {blogs.map((blog) => (
         <BlogCard key={blog.id} blog={blog} />
       ))}
     </div>
