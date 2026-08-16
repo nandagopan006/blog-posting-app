@@ -8,24 +8,29 @@ import AddBlog from "./pages/AddBlog";
 import EditBlog from "./pages/EditBlog";
 import NotFound from "./pages/NotFound";
 
+
+
+
 function App() {
-  return (
+
+ return (
     <div>
       <Navbar />
 
       <main>
-
         <Routes>
-          
+
           <Route path="/login" element={<Login />} />
-          <Route path="/blogs" element={<BlogList />}/>
+
+          <Route path="/blogs" element={<BlogList />} />
+
           <Route path="/blogs/add" element={<AddBlog />} />
+
           <Route path="/blogs/edit/:id" element={<EditBlog />} />
+          
           <Route path="*" element={<NotFound />} />
-
+          
         </Routes>
-
-
       </main>
     </div>
   );
