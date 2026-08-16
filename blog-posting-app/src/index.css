@@ -5,4 +5,23 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  
+}
+
+ nav {
+  padding: 20px;
+  padding-bottom: 1px solid #ddd;
+
+}
+
+nav h2 {
+
+  margin-top : 0;
+}
+nav a {
+  margin-right: 10px;
+  text-decoration: none;
+}
+nav a.active-link {
+  font-weight: bold;
 }
