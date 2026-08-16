@@ -20,6 +20,19 @@ function addBlog(newBlog){
 
   setBlogs((prevBlogs) => [...prevBlogs,newBlog]);
 }
+function updateBlog(updatedBlog){
+
+  setBlogs((prevBlog)=> 
+  
+    prevBlog.map((blog)=>{
+
+      if (String(blog.id) === String(updatedBlog.id)){
+        return updatedBlog
+      }
+      return blog
+    })
+  )
+}
 
   return (
     <div>
@@ -32,7 +45,7 @@ function addBlog(newBlog){
           <Route path="/login" element={<Login />} />
           <Route path="/blogs" element={<BlogList blogs ={blogs} />}/>
           <Route path="/blogs/add" element={<AddBlog addBlog={addBlog} />} />
-          <Route path="/blogs/edit/:id" element={<EditBlog />} />
+          <Route path="/blogs/edit/:id" element={<EditBlog blogs={blogs} updateBlog={updateBlog} />} />
           <Route path="*" element={<NotFound />} />
 
         </Routes>

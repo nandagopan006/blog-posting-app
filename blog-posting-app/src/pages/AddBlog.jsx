@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function AddBlog({addBlog}) {
     const [title,setTitle]=useState("")
     const [content,setContent] = useState("")
+    const [error,setError]=useState("")
 
     const navigate=useNavigate()
 
@@ -21,8 +22,20 @@ function AddBlog({addBlog}) {
     function handleSubmit(e){
         e.preventDefault()
 
-        if (!title.trim() || !content.trim()) return ;
+        if (!title.trim() && !content.trim()) {
+      setError("Title and content are required.");
+      return;
+    }
+    if (!title.trim()){
 
+        setError("Title is required.")
+        return;
+
+    }
+    if (!content.trim()){
+        setError("Content is required")
+        return ;
+    }
         const newBlog = {
             id: Date.now(),
             title,
@@ -47,6 +60,7 @@ function AddBlog({addBlog}) {
     <h1>Add Blog</h1>
 
     <div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <form  onSubmit={handleSubmit}>
 
             <input type="text" placeholder="Enter the Title" value={title} onChange={handleTitle}/>
