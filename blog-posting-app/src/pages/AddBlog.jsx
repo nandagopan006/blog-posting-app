@@ -1,10 +1,12 @@
 
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import BlogContext from "../context/BlogContext";
 
 
+function AddBlog() {
 
-function AddBlog({addBlog}) {
+    const {addBlog}=useContext(BlogContext)
     const [title,setTitle]=useState("")
     const [content,setContent] = useState("")
     const [error,setError]=useState("")
@@ -21,6 +23,7 @@ function AddBlog({addBlog}) {
 
     function handleSubmit(e){
         e.preventDefault()
+        setError("")
 
         if (!title.trim() && !content.trim()) {
       setError("Title and content are required.");

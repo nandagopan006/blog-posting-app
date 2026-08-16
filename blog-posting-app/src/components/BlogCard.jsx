@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import BlogContext from "../context/BlogContext";
 
-function BlogCard({ blog }) {
-    const naviagte=useNavigate()
-
+function BlogCard({blog}) {
+    const navigate=useNavigate()
+    const {deleteBlog}= useContext(BlogContext)
 function handleEdit(){
-    naviagte(`/blogs/edit/${blog.id}`);
+    navigate(`/blogs/edit/${blog.id}`);
 
 }
 
@@ -15,7 +17,7 @@ function handleEdit(){
       
       <div style={{ display: "flex", gap: "10px" }}>
         <button onClick={handleEdit} >Edit</button>
-        <button>Delete</button>
+        <button onClick={()=>deleteBlog(blog.id)}>Delete</button>
       </div>
     </div>
   );

@@ -1,11 +1,15 @@
 import { useParams ,useNavigate} from "react-router-dom";
 import { useState } from "react";
+import { useContext } from "react";
+import BlogContext from "../context/BlogContext";
 
 
-function EditBlog({blogs,updateBlog}) {
+
+function EditBlog() {
 
     const { id } = useParams()
     const navigate=useNavigate()
+    const {blogs, updateBlog} =useContext(BlogContext)
 
     const existingBlog =blogs.find((blog) => String(blog.id) === id)
 
@@ -42,7 +46,7 @@ function EditBlog({blogs,updateBlog}) {
             return;
         }
     if (!content){
-        setError("Title is required");
+        setError("Content is required");
             return;
 
     }
