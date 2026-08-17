@@ -1,5 +1,10 @@
-import { createContext, useState } from "react";
-import { addBlog as addBlogToFirestore } from "../services/firestoreService";
+import { createContext, useState ,useEffect } from "react";
+import { addBlog as addBlogToFirestore,
+        getBlogs,
+        updateBlog as updateBlogToFirestore,
+        deleteBlog as deleteBlogFromFirestore,
+
+} from "../services/firestoreService";
 
 
 const BlogContext =createContext()
@@ -7,6 +12,22 @@ const BlogContext =createContext()
 function BlogProvider({children}){
     
   const [blogs, setBlogs] = useState([]);
+
+  useEffect(()=>{
+async function loadBlogs(){
+
+    try {
+        
+        const blogFromFirestore =await getBlogs()
+        setBlogs(blogFromFirestore);
+    
+    } catch(error){
+        console.log(error);
+    }
+}
+loadBlogs();
+
+  },[]);
 
   async function addBlog(title,content){
 
@@ -22,16 +43,24 @@ function BlogProvider({children}){
   }
 
 
-  function updateBlog(updatedBlog){
+   async function updateBlog(updatedBlog){
+
+    await updateBlogToFirestore(
+        updatedBlog.id,
+        updatedBlog.title,
+        updatedBlog.content
+    );
 
     setBlogs((currentBlogs)=>
     currentBlogs.map((blog)=> blog.id === updatedBlog.id ? updatedBlog : blog
 ))
   }
 
-  function deleteBlog(id){
+   async function deleteBlog(id){
+    await deleteBlogFromFirestore(id);
     setBlogs((currentBlogs)=> currentBlogs.filter((blog)=> blog.id !== id))
   }
+  
 
     return (
 
