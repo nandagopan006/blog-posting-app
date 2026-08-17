@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import BlogContext from "../context/BlogContext";
 
 
+
 function AddBlog() {
 
     const {addBlog}=useContext(BlogContext)
+
     const [title,setTitle]=useState("")
     const [content,setContent] = useState("")
     const [error,setError]=useState("")
@@ -21,7 +23,7 @@ function AddBlog() {
         setContent(event.target.value)
     }
 
-    function handleSubmit(e){
+    async function handleSubmit(e){
         e.preventDefault()
         setError("")
 
@@ -39,21 +41,23 @@ function AddBlog() {
         setError("Content is required")
         return ;
     }
-        const newBlog = {
-            id: Date.now(),
-            title,
-            content,
-        };
 
-        addBlog(newBlog)
+    try{
+        await addBlog(title,content)
 
-    //  Reset form state & redirect to the blogs list
-    setTitle("");
-    setContent("");
+        //  Reset form state & redirect to the blogs list
+        setTitle("");
+        setContent("");
 
-    // Redirect to blogs page
-    navigate("/blogs")
-        
+        // Redirect to blogs page
+        navigate("/blogs")
+
+    }catch (error) {
+        console.log(error)
+        setError(error.message)
+    }
+    
+
     }
 
 

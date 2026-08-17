@@ -1,15 +1,27 @@
 import { createContext, useState } from "react";
-import blogData from "../utils/blogData";
+import { addBlog as addBlogToFirestore } from "../services/firestoreService";
+
 
 const BlogContext =createContext()
 
 function BlogProvider({children}){
     
-  const [blogs, setBlogs] = useState(blogData);
+  const [blogs, setBlogs] = useState([]);
 
-  function addBlog(newBlog){
+  async function addBlog(title,content){
+
+    const blogRef= await addBlogToFirestore(title,content);
+
+    const newBlog ={
+        id : blogRef.id,
+        title,
+        content,
+    };
+
     setBlogs((currentBlogs)=> [...currentBlogs,newBlog]);
   }
+
+
   function updateBlog(updatedBlog){
 
     setBlogs((currentBlogs)=>
