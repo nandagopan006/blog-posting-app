@@ -1,12 +1,24 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 function Navbar() {
   const { user, loading, logout } = useContext(AuthContext);
 
+  const navigate=useNavigate()
+
+
   function activeClass({ isActive }) {
     return isActive ? "active-link" : "";
+  }
+  async function handleLogout(){
+    try {
+        await logout()
+        navigate("/login")
+    } catch (error) {
+        console.log(error);
+
+    }
   }
 
   return (
@@ -28,7 +40,7 @@ function Navbar() {
 
             {" | "}
 
-            <button onClick={logout}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
