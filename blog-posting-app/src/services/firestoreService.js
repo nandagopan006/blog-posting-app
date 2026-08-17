@@ -43,8 +43,8 @@ async function getBlogs(){
 
 }
 
-async function updateBlog(id, title, content ,authorId) {
-    // Fixed collection name from "blog" to "blogs"
+async function updateBlog(id, title, content) {
+    
     const blogRef = doc(db, "blogs", id);
 
     await updateDoc(blogRef, {
