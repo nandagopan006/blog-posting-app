@@ -18,7 +18,11 @@ function BlogProvider({children}){
   const [blogs, setBlogs] = useState([]);
 
   useEffect(()=>{
-async function loadBlogs(){
+
+    if (!user){
+        return;
+    }
+    async function loadBlogs(){
 
     try {
         
@@ -31,7 +35,7 @@ async function loadBlogs(){
 }
 loadBlogs();
 
-  },[]);
+  },[user]);
 
   async function addBlog(title,content){
 
@@ -57,7 +61,12 @@ loadBlogs();
     );
 
     setBlogs((currentBlogs)=>
-    currentBlogs.map((blog)=> blog.id === updatedBlog.id ? updatedBlog : blog
+    currentBlogs.map((blog)=> blog.id === updatedBlog.id ? {
+          ...blog,
+          title: updatedBlog.title,
+          content: updatedBlog.content,
+        }
+      : blog
 ))
   }
 

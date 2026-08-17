@@ -13,6 +13,7 @@ function AddBlog() {
     const [content,setContent] = useState("")
     const [error,setError]=useState("")
 
+
     const navigate=useNavigate()
 
     function handleTitle(event){
@@ -26,6 +27,8 @@ function AddBlog() {
     async function handleSubmit(e){
         e.preventDefault()
         setError("")
+      
+
 
         if (!title.trim() && !content.trim()) {
       setError("Title and content are required.");
@@ -57,6 +60,7 @@ function AddBlog() {
         setError(error.message)
     }
     
+    
 
     }
 
@@ -77,7 +81,7 @@ function AddBlog() {
             onChange={handleContent}
           />
 
-        <button type="submit">Create blog</button>
+        <button type="submit" > Create blog </button>
 
         </form>
 

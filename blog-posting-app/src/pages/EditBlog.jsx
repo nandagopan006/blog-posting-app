@@ -1,72 +1,112 @@
-import { useParams ,useNavigate} from "react-router-dom";
-import { useState } from "react";
-import { useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+
 import BlogContext from "../context/BlogContext";
-
-
+import AuthContext from "../context/AuthContext";
 
 function EditBlog() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    const { id } = useParams()
-    const navigate=useNavigate()
-    const {blogs, updateBlog} =useContext(BlogContext)
+  const { blogs, updateBlog } = useContext(BlogContext);
+  const { user } = useContext(AuthContext);
 
-    const existingBlog =blogs.find((blog) => String(blog.id) === id)
+  const existingBlog = blogs.find(
+    (blog) => String(blog.id) === id
+  );
 
-    const [title, setTitle] = useState(existingBlog?.title ?? "")
-    const [content, setContent] = useState(existingBlog?.content ?? "");
-    const [error,setError]=useState("")
+  const [title, setTitle] = useState(
+    existingBlog?.title ?? ""
+  );
 
-    if (!existingBlog){
-        return (
+  const [content, setContent] = useState(
+    existingBlog?.content ?? ""
+  );
+
+  const [error, setError] = useState("");
+ 
+
+  if (!existingBlog) {
+    return (
       <div style={{ padding: "20px" }}>
         <h2>Blog not found</h2>
-        <button onClick={() => navigate("/blogs")}>Back to Blogs</button>
+
+        <button onClick={() => navigate("/blogs")}>
+          Back to Blogs
+        </button>
       </div>
     );
+  }
+
+  const isAuthor = user?.uid === existingBlog.authorId;
+
+  if (!isAuthor) {
+    return (
+      <div style={{ padding: "20px" }}>
+        <h2>You cannot edit this blog.</h2>
+
+        <button onClick={() => navigate("/blogs")}>
+          Back to Blogs
+        </button>
+      </div>
+    );
+  }
+
+  function handleTitle(e) {
+    setTitle(e.target.value);
+  }
+
+  function handleContent(e) {
+    setContent(e.target.value);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    setError("");
+
+    if (!title.trim() && !content.trim()) {
+      setError("Title and content are required.");
+      return;
     }
 
-    function handleTitle(e){
-        setTitle(e.target.value)
-    }
-    function handleContent(e){
-        setContent(e.target.value)
+    if (!title.trim()) {
+      setError("Title is required.");
+      return;
     }
 
-    function handleSubmit(e){
-
-        e.preventDefault();
-
-        if (!title.trim() && !content.trim()){
-            setError("Title and content are required.")
-            return;
-        }
-        if (!title){
-            setError("Title is required");
-            return;
-        }
-    if (!content){
-        setError("Content is required");
-            return;
-
+    if (!content.trim()) {
+      setError("Content is required.");
+      return;
     }
 
-        const updatedBlog={
-            id:existingBlog.id,
-            title,
-            content,
-        }
-        updateBlog(updatedBlog)
-        navigate("/blogs")
-    }
+    const updatedBlog = {
+      id: existingBlog.id,
+      title: title.trim(),
+      content: content.trim(),
+    };
 
-    
+    try {
+
+      await updateBlog(updatedBlog);
+
+      navigate("/blogs");
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    }
+  }
 
   return (
     <div>
       <h2>Edit Blog</h2>
 
-       {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && (
+        <p style={{ color: "red" }}>
+          {error}
+        </p>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div>
           <input
@@ -75,13 +115,20 @@ function EditBlog() {
             onChange={handleTitle}
           />
         </div>
+
         <div>
           <textarea
             value={content}
             onChange={handleContent}
           />
         </div>
-        <button type="submit">Update Blog</button>
+
+        <button
+          type="submit"
+        
+        >
+          Update Blog
+        </button>
       </form>
     </div>
   );

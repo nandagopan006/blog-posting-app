@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext,useState } from "react";
 
 import BlogContext from "../context/BlogContext";
 import AuthContext from "../context/AuthContext";
@@ -11,6 +11,7 @@ function BlogCard({ blog }) {
   const { user } = useContext(AuthContext);
 
   const isAuthor = user?.uid === blog.authorId;
+  const [error, setError] = useState(""); 
 
   function handleEdit() {
     if (!isAuthor) {
@@ -20,12 +21,21 @@ function BlogCard({ blog }) {
     navigate(`/blogs/edit/${blog.id}`);
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!isAuthor) {
       return;
     }
 
-    deleteBlog(blog.id);
+    setError("")
+
+    try {
+        await deleteBlog(blog.id);
+        
+    } catch (error){
+        console.log(error);
+        setError(error.message)
+    }
+    
   }
 
   return (
@@ -40,7 +50,7 @@ function BlogCard({ blog }) {
       <h3>{blog.title}</h3>
 
       <p>{blog.content}</p>
-
+      {error && <p style={{ color: "red" }}>{error}</p>} 
       <div style={{ display: "flex", gap: "10px" }}>
         <button
           onClick={handleEdit}
