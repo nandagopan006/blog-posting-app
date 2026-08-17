@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
-function Login() {
-  const { login } = useContext(AuthContext);
+function Register() {
+  const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -18,12 +18,10 @@ function Login() {
     setSubmitting(true);
 
     try {
-      await login(email, password);
-      navigate("/blogs");
-
+      await register(email, password);
+      navigate("/login");
     } catch (error) {
       console.log(error);
-      
       setError(error.code || error.message);
     } finally {
       setSubmitting(false);
@@ -32,7 +30,7 @@ function Login() {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Register</h1>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -55,16 +53,17 @@ function Login() {
             type="password"
             value={password}
             required
+            
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
 
         <button type="submit" disabled={submitting}>
-          {submitting ? "Logging in..." : "Login"}
+          {submitting ? "Registering..." : "Register"}
         </button>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Register;

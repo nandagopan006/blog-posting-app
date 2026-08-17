@@ -32,6 +32,7 @@ function AuthProvider({ children }) {
         email,
         password
     );
+    await signOut(auth);
     return userCredential.user;
   }
 
