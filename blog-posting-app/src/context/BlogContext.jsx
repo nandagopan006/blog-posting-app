@@ -1,15 +1,19 @@
-import { createContext, useState ,useEffect } from "react";
+import { createContext,useContext, useState ,useEffect } from "react";
 import { addBlog as addBlogToFirestore,
         getBlogs,
         updateBlog as updateBlogToFirestore,
         deleteBlog as deleteBlogFromFirestore,
 
 } from "../services/firestoreService";
-
+import AuthContext from "./AuthContext";
 
 const BlogContext =createContext()
 
+
+
 function BlogProvider({children}){
+
+    const { user } = useContext(AuthContext);
     
   const [blogs, setBlogs] = useState([]);
 
@@ -31,12 +35,13 @@ loadBlogs();
 
   async function addBlog(title,content){
 
-    const blogRef= await addBlogToFirestore(title,content);
+    const blogRef= await addBlogToFirestore(title,content,user.uid);
 
     const newBlog ={
         id : blogRef.id,
         title,
         content,
+        authorId : user.uid,
     };
 
     setBlogs((currentBlogs)=> [...currentBlogs,newBlog]);

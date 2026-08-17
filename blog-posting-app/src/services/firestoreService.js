@@ -6,6 +6,7 @@ import {
     doc,
     collection,
     getFirestore,
+
 } from "firebase/firestore"
 
 
@@ -14,12 +15,13 @@ import app from "./firebase";
 const db =getFirestore(app)
 
 // Function to add a new blog document to Firestore
-async function addBlog(title,content) {
+async function addBlog(title,content,authorId) {
     const blogRef = await addDoc(
         collection(db,"blogs"),
         {
-            title:title,
-            content:content,
+            title,
+            content,
+            authorId,
         }
     );
 
@@ -41,7 +43,7 @@ async function getBlogs(){
 
 }
 
-async function updateBlog(id, title, content) {
+async function updateBlog(id, title, content ,authorId) {
     // Fixed collection name from "blog" to "blogs"
     const blogRef = doc(db, "blogs", id);
 
