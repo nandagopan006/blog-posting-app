@@ -1,27 +1,181 @@
-* {
-  box-sizing: border-box;
+@import "tailwindcss";
+
+/* ============================================================
+   THEME  -  Tailwind v4 CSS-first config
+   Minimal palette: near-black ground, one accent (violet).
+   Built-in shades already match: violet-500 #8b5cf6,
+   slate-400 #94a3b8, slate-900 #0f172a.
+   ============================================================ */
+@theme {
+  /* extra tier for small phones - Tailwind ships sm/md/lg/xl/2xl only */
+  --breakpoint-xs: 30rem;
+
+  --color-ink: #0a0d14;
+
+  --font-sans: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-fade-up: fade-up 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-down: slide-down 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shimmer: shimmer 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-pulse-dot: pulse-dot 3s ease-in-out infinite;
+  --animate-backdrop-in: fade-in 260ms ease-out both;
+  --animate-modal-in: modal-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-sheet-in: sheet-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translate3d(-50%, -14px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  /* desktop: rise + settle. mobile uses sheet-in instead */
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-130%);
+    }
+    55% {
+      transform: translateX(260%);
+    }
+    100% {
+      transform: translateX(260%);
+    }
+  }
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  
+/* ============================================================
+   BASE
+   ============================================================ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #e8edf5;
+    background-color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* one restrained glow instead of three - keeps the ground quiet */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      42rem 30rem at 50% -8%,
+      rgba(139, 92, 246, 0.1),
+      transparent 70%
+    );
+  }
+
+  ::selection {
+    background: rgba(139, 92, 246, 0.3);
+    color: #fff;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 }
 
- nav {
-  padding: 20px;
-  border-bottom: 1px solid #ddd;
-
-}
-
-nav h2 {
-
-  margin-top : 0;
-}
-nav a {
-  margin-right: 10px;
-  text-decoration: none;
-}
-nav a.active-link {
-  font-weight: bold;
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
