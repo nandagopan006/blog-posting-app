@@ -17,10 +17,10 @@ import Register from "./pages/Register";
 function App() {
 
  return (
-    <div>
+    <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      <main>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-24 pb-16 sm:px-6 sm:pt-28 sm:pb-24 lg:px-8">
         <Routes>
 
           <Route path="/register" element={
@@ -59,9 +59,9 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+
           <Route path="*" element={<NotFound />} />
-          
+
         </Routes>
       </main>
     </div>

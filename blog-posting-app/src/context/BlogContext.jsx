@@ -39,6 +39,26 @@ loadBlogs();
 
   async function addBlog(title,content){
 
+    // Prevent duplicates:
+    const newTitle = title.trim().toLowerCase();
+    const newContent = content.trim().toLowerCase();
+
+    const titleExists = blogs.some(
+      (blog) => blog.title.trim().toLowerCase() === newTitle
+    );
+
+    if (titleExists) {
+      throw new Error("A blog with this title already exists.");
+    }
+
+    const contentExists = blogs.some(
+      (blog) => blog.content.trim().toLowerCase() === newContent
+    );
+
+    if (contentExists) {
+      throw new Error("A blog with this content already exists.");
+    }
+
     const blogRef= await addBlogToFirestore(title,content,user.uid);
 
     const newBlog ={
@@ -53,6 +73,30 @@ loadBlogs();
 
 
    async function updateBlog(updatedBlog){
+
+    // Prevent duplicates, 
+    const editedTitle = updatedBlog.title.trim().toLowerCase();
+    const editedContent = updatedBlog.content.trim().toLowerCase();
+
+    const titleExists = blogs.some(
+      (blog) =>
+        blog.id !== updatedBlog.id &&
+        blog.title.trim().toLowerCase() === editedTitle
+    );
+
+    if (titleExists) {
+      throw new Error("A blog with this title already exists.");
+    }
+
+    const contentExists = blogs.some(
+      (blog) =>
+        blog.id !== updatedBlog.id &&
+        blog.content.trim().toLowerCase() === editedContent
+    );
+
+    if (contentExists) {
+      throw new Error("A blog with this content already exists.");
+    }
 
     await updateBlogToFirestore(
         updatedBlog.id,
